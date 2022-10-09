@@ -19,7 +19,7 @@ class TcpServer:
     def server(self):
         while True:
             print("等待连接")
-            self.clientSocket, addr = self.tcpServerSocket.accept()  
+            self.clientSocket, addr = self.tcpServerSocket.accept()
             print ('连接地址：', addr)
             if self.connected_listener:
                 self.connected_listener()
@@ -43,4 +43,4 @@ class TcpServer:
                         print(text)
                         if not text:
                             break
-                        if self.receive_listene
+                        if self.receive_listener
