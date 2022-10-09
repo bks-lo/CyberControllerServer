@@ -1,0 +1,1 @@
+D:\Python39\pythonw.exe E:\project\python\CyberControllerServer\Controller.pyw

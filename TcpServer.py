@@ -9,7 +9,9 @@ class TcpServer:
         self.tcpServerSocket=socket.socket()#创建socket对象
         hostname= socket.gethostname()#获取本地主机名
         sysinfo = socket.gethostbyname_ex(hostname)
+        print(sysinfo)
         hostip=sysinfo[2][2]
+        print(hostip)
         self.tcpServerSocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)#让端口可以复用
         self.tcpServerSocket.bind((hostip,self.port))#将地址与套接字绑定，且套接字要求是从未被绑定过的
         self.tcpServerSocket.listen(5)#代办事件中排队等待connect的最大数目
@@ -19,7 +21,7 @@ class TcpServer:
     def server(self):
         while True:
             print("等待连接")
-            self.clientSocket, addr = self.tcpServerSocket.accept()  
+            self.clientSocket, addr = self.tcpServerSocket.accept()
             print ('连接地址：', addr)
             if self.connected_listener:
                 self.connected_listener()
@@ -52,8 +54,8 @@ class TcpServer:
                     print("ConnectionResetError!")
                     self.restart()
                     return
-                
-               
+
+
             self.clientSocket.close() # 关闭连接
         self.tcpServerSocket.close()
 
@@ -76,7 +78,7 @@ class TcpServer:
         return ((ch1 << 24) + (ch2 << 16) + (ch3 << 8) + (ch4 << 0));
 
 
-    def start(self): 
+    def start(self):
         self.server_threading = threading.Thread(target=self.server, args=())
         self.server_threading.start()
 
@@ -92,11 +94,11 @@ class TcpServer:
     def send_img(self, bytes_data):
         data = self.wrapper_data(2,bytes_data)
         self.send_data(data)
-  
+
     def send_text(self, text):
         data = self.wrapper_data(1,text.encode())
         self.send_data(data)
-    
+
     def wrapper_data(self,data_type,body_data):
 
         print("data_type:",data_type)
