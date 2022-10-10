@@ -14,20 +14,20 @@ class ComputerMonitor:
 	def monit_windows_lock(self):
 		while True:
 			process_name='LogonUI.exe'
-			callall='TASKLIST'
-			outputall=subprocess.check_output(callall)
+			#callall='TASKLIST'
+			callLogonUI="tasklist.exe /fi \"IMAGENAME eq " + process_name + "\""
+			outputall=subprocess.check_output(callLogonUI,shell = True)
 			outputstringall=str(outputall)
 			if process_name in outputstringall:
 				print("Locked.")
 				if self.callback:
 					self.callback()
-			else: 
+			else:
 			   pass
-			   
+
 			time.sleep(1)
 
 	def start(self):
 		monitor_threading = threading.Thread(target=self.monitor, args=())
 		monitor_threading.start()
 		self.started = True
-		

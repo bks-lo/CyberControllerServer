@@ -8,6 +8,7 @@ import json
 import pyautogui
 from KeyboardManager import *
 import time
+import sys
 
 
 def on_message_received(data):
@@ -28,8 +29,11 @@ def on_tcp_connected():
 	if not computerMonitor.started:
 		computerMonitor.start()
 
+if len(sys.argv) != 2:
+	print("Requires a local IP parameter [192.168.xxx.xxx]")
+	exit(0)
 
-tcpServer = TcpServer()
+tcpServer = TcpServer(sys.argv[1])
 tcpServer.set_receive_listener(on_message_received)
 tcpServer.connected_listener = on_tcp_connected
 tcpServer.start()

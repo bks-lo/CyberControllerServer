@@ -3,15 +3,18 @@ import threading
 import json
 
 class TcpServer:
-    def __init__(self):
+    def __init__(self, localip):
         self.port=2233#设置端口
         self.HEAD_LEN=8
         self.tcpServerSocket=socket.socket()#创建socket对象
         hostname= socket.gethostname()#获取本地主机名
         sysinfo = socket.gethostbyname_ex(hostname)
-        print(sysinfo)
-        hostip=sysinfo[2][2]
-        print(hostip)
+
+        if localip not in sysinfo[2]:
+            print(localip, " not in local ip list ", sysinfo[2])
+            exit(0)
+
+        hostip=localip
         self.tcpServerSocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)#让端口可以复用
         self.tcpServerSocket.bind((hostip,self.port))#将地址与套接字绑定，且套接字要求是从未被绑定过的
         self.tcpServerSocket.listen(5)#代办事件中排队等待connect的最大数目
