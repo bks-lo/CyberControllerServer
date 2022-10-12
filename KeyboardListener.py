@@ -10,30 +10,29 @@ class KeyboardListener:
 		self.c = 0
 		self.key_state_map={}
 		self.screen_capture = None
-		
+
 	def listen_keyboard(self,callback):
 		self.callback = callback
 		keyboard.hook(self.onKeyEvent)
 		keyboard.wait()
 
-	def onImgCapture(self,pic):	
+	def onImgCapture(self,pic):
 		imgByteArr = io.BytesIO()
 		pic.save(imgByteArr, format='JPEG')
 		bytes_data = imgByteArr.getvalue()
 		self.tcpServer.send_img(bytes_data)
 
-	def isCtrlHolding(self):
-		return ('ctrl' in self.key_state_map and self.key_state_map['ctrl']=='down')\
-			or ('left ctrl' in self.key_state_map and self.key_state_map['left ctrl']=='down')\
-			or ('right ctrl' in self.key_state_map and self.key_state_map['right ctrl']=='down')
-
-	def isAltHolding(self):
-		return ('alt' in self.key_state_map and self.key_state_map['alt']=='down')\
-			or ('left alt' in self.key_state_map and self.key_state_map['left alt']=='down')\
-			or ('right alt' in self.key_state_map and self.key_state_map['right alt']=='down')
-
 	def isKeyHolding(self,key):
 		return (key in self.key_state_map and self.key_state_map[key]=='down')
+
+	def isCtrlHolding(self):
+		return self.isKeyHolding('ctrl') or self.isKeyHolding('left ctrl') or self.isKeyHolding('right ctrl')
+
+	def isAltHolding(self):
+		return self.isKeyHolding('alt') or self.isKeyHolding('left alt') or self.isKeyHolding('right alt')
+
+	def isShiftHolding(self):
+		return self.isKeyHolding('shift') or self.isKeyHolding('left shift') or self.isKeyHolding('right shift')
 
 
 	def onKeyEvent(self,key):
@@ -42,9 +41,9 @@ class KeyboardListener:
 
 		#is screenshoot?
 
-		if  self.isKeyHolding("caps lock")\
+		if  self.isAltHolding()\
 			and key.event_type=="down"\
-			and key.name.lower()=="a":
+			and key.name.lower()=="z":
 			self.screen_capture = ScreenCapture()
 			self.screen_capture.are_capture(self.onImgCapture)
 
@@ -75,4 +74,3 @@ class KeyboardListener:
 				print("need trans")
 				if self.callback:
 					self.callback()
-
